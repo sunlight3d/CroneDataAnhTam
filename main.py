@@ -11,6 +11,7 @@ driver.find_element_by_xpath("//*[@class='button' and @value='Login']").click()
 
 x6 = driver.find_elements_by_xpath("//table[@class='categories']//child::a")
 x7 = x6[0].get_attribute('href') #https://towneshops.directedje.com/Galardi/product-listing.asp?CID=-2&IDS=&QTY=
+x8 = x6[0].get_attribute('text')
 #https://towneshops.directedje.com/Galardi/product-listing.asp?P=1&CID=-2&IDS=&QTY=&RPP=1000
 
 print("hello")
