@@ -8,6 +8,11 @@ driver.find_element_by_id("Client.Password").send_keys("GGI")
 
 #driver.find_elements_by_xpath("//*[@class='productlisting']").click()
 driver.find_element_by_xpath("//*[@class='button' and @value='Login']").click()
+
+x6 = driver.find_elements_by_xpath("//table[@class='categories']//child::a")
+x7 = x6[0].get_attribute('href') #https://towneshops.directedje.com/Galardi/product-listing.asp?CID=-2&IDS=&QTY=
+#https://towneshops.directedje.com/Galardi/product-listing.asp?P=1&CID=-2&IDS=&QTY=&RPP=1000
+
 print("hello")
 
 driver.get ("https://towneshops.directedje.com/Galardi/product-listing.asp?RPP=1000&P=1&CID=583&IDS=&QTY=")
