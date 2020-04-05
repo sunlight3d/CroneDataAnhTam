@@ -6,12 +6,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from urls import URL_HOME, URL_LOGIN, URL_PRODUCT_DETAIL, URL_PRODUCT_LISTING
 from driver import driver
 from Login import Login
-import psycopg2
+from Database import database
 class Category:
     def __init__(self, category_name, category_id):
         self.category_name = category_name
         self.category_id = category_id
-
+        
     @staticmethod
     def get_categories():
         login = Login()
@@ -25,3 +25,10 @@ class Category:
             new_category = Category(category_name, category_id)
             categories.append(new_category)
         return categories
+
+    @staticmethod
+    def insert_categories_to_db():
+        categories = Category.get_categories()
+        for category in categories:
+            database.insert_category(category.category_id, category.category_name)
+
