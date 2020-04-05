@@ -8,6 +8,7 @@ from driver import driver
 from Login import Login
 from Database import database
 import urllib.request
+from urls import URL_HOME, URL_LOGIN, URL_PRODUCT_DETAIL, URL_PRODUCT_LISTING
 
 class Product:
     def __init__(self, product_id, product_name, available, image_url):
@@ -17,7 +18,8 @@ class Product:
         self.image_url = image_url
 
     @staticmethod
-    def get_products(link__to_products_page):
+    def get_products(category_id):
+        link__to_products_page = URL_PRODUCT_LISTING+"RPP=1000&P=1&CID="+str(category_id)+"&IDS=&QTY="
         #"https://towneshops.directedje.com/Galardi/product-listing.asp?RPP=1000&P=1&CID=583&IDS=&QTY="
         driver.get(link__to_products_page)
         products_elements = driver.find_elements_by_xpath("//table[@class='productlisting']//child::tr")
@@ -29,6 +31,7 @@ class Product:
             available = temp[4].split(" ")[0] if "Available" in temp[4] else 0
             image_url = products_element.find_element_by_xpath("//a[@class='thickbox']").get_attribute('href')
             image_name = image_url.split("/")[-1]
+            #save image to images
             urllib.request.urlretrieve(image_url, './images/' + image_name)
             new_product = Product(product_id, product_name, available, image_url)
             products.append(new_product)
