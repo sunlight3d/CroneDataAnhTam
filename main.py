@@ -1,6 +1,8 @@
 x = "https://towneshops.directedje.com/Galardi/catalog.asp"
 from selenium import webdriver
 import pandas as pd
+import urllib.request
+
 driver = webdriver.Chrome()
 driver.get ("https://towneshops.directedje.com/Galardi/login.asp")
 driver.find_element_by_id("Client.UserName").send_keys("elisa")
@@ -24,7 +26,12 @@ productId = x11[0]
 productName = x11[2]
 available = x11[4].split(" ")[0] if "Available" in x11[4] else 0
 x12 = x10.find_element_by_xpath("//a[@class='thickbox']").get_attribute('href')
+x13 = x12.split("/")[-1]
+
+urllib.request.urlretrieve(x12, './images/'+x13)
+#x12 la link anh
 print("hello")
+
 x1 = x.text
 x2 = x1.split("\n")
 
