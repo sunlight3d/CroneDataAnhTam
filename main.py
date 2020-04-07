@@ -6,4 +6,5 @@ categories = Category.get_categories()
 # Category.insert_categories_to_db(categories)
 for category in categories:
     products = Product.get_products(category.category_id)
-    Product.insert_products_to_db(products)
+    # Product.insert_products_to_db(products)
+    # Product.save_product_images(products)

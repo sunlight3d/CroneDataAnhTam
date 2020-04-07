@@ -12,11 +12,14 @@ from selenium.common.exceptions import TimeoutException
 from urls import URL_HOME, URL_LOGIN, URL_PRODUCT_DETAIL, URL_PRODUCT_LISTING
 
 class Product:
-    def __init__(self, product_id, product_name, available, image_url):
+    def __init__(self, product_id, product_name, available, image_name, image_url, category_id):
         self.product_id = product_id
         self.product_name = product_name
         self.available = available
+        self.image_name = image_name
         self.image_url = image_url
+        self.category_id = category_id
+
 
     @staticmethod
     def get_products(category_id):
@@ -28,23 +31,38 @@ class Product:
             driver.execute_script("window.stop();")
         products_elements = driver.find_elements_by_xpath("//table[@class='productlisting']//child::tr")
         products = []
-        for products_element in products_elements:
-            temp = products_element.text.split("\n")
-            product_id = temp[0]
-            product_name = temp[2]
-            available = temp[4].split(" ")[0] if "Available" in temp[4] else 0
-            image_url = products_element.find_element_by_xpath("//a[@class='thickbox' and @title='"+product_name+"']").get_attribute('href')
-            image_name = image_url.split("/")[-1]
-            #save image to images
+        for product_element in products_elements:
             try:
-                urllib.request.urlretrieve(image_url, './images/' + image_name)
+                temp = product_element.text.split("\n")
+                product_id = temp[0]
+                product_name = r'{}'.format(temp[2])
+                available = temp[4].split(" ")[0] if "Available" in temp[4] else 0
+                try:
+                    image_url = product_element.find_element_by_class_name('thickbox').get_attribute('href')
+                    image_name = image_url.split("/")[-1]
+                except Exception as e:
+                    image_url = ""
+                    image_name = ""
+                # save image to images
+                new_product = Product(product_id, product_name, available, image_name, image_url, category_id)
+                products.append(new_product)
             except Exception as e:
-                print("cannot save image: "+image_url)
-            new_product = Product(product_id, product_name, available, image_name)
-            products.append(new_product)
-        print("Insert products successfully")
+                import pdb
+                pdb.set_trace()
+                print("error creating product : "+str(e))
+
+        print("Insert products successfully for category_id : "+category_id)
         return products
 
+    @staticmethod
+    def save_product_images(products):
+        for product in products:
+            try:
+                image_url = product.image_url
+                image_name = product.image_name
+                urllib.request.urlretrieve(image_url, './images/' + image_name)
+            except Exception as e:
+                print("cannot save image: " + image_url+".Error: "+e)
     @staticmethod
     def insert_products_to_db(products):
         for product in products:
