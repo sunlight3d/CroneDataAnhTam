@@ -11,9 +11,9 @@ class Database:
 
 	def insert_product( self, product_id, product_name, product_description, available, category_id ):
 		try:
-			sql = """INSERT INTO tblProducts(product_id, product_name, product_description, available, category_id)""" + \
+			sql = """INSERT INTO tblProducts(?,?,?,?,?)""" + \
 				  """ VALUES(%s, %s,%s, %s,%s)"""
-			self.get_cursor().execute(sql, (product_id, product_name, product_description, available, category_id))
+			self.get_cursor().execute(sql, [product_id, product_name, product_description, available, category_id])
 			self.connection.commit()
 			self.connection.close()
 		except Exception as err:
@@ -22,13 +22,14 @@ class Database:
 
 	def insert_category( self, category_id, category_name ):
 		try:
-			sql = "INSERT INTO tblCategories(category_id, category_name) VALUES(%s, %s)"
-			self.get_cursor().execute(sql, (category_id, category_name))
+			sql = "INSERT INTO tblCategories(category_id, category_name) VALUES(?, ?)"
+			self.get_cursor().execute(sql, [category_id, category_name])
 			self.connection.commit()
 			self.connection.close()
 		except Exception as err:
 			print("Cannot insert category with id="+category_id+"category_name = "+category_name)
 			print(err)
+
 database = Database()
 
 

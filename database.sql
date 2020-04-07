@@ -1,15 +1,15 @@
-CREATE DATABASE towneshops IF NOT EXISTS;
+
 CREATE TABLE tblCategories(
-	categoryId INT PRIMARY KEY,
-	categoryName VARCHAR(1000)
+	category_id INTEGER PRIMARY KEY,
+	category_name VARCHAR(1000)
 );
 
 CREATE TABLE tblProducts(
-	productId VARCHAR(200) PRIMARY KEY,
-	productName VARCHAR(1000),
-	productDescription VARCHAR(1000),
-	available INT,
-	categoryId INT,
+	product_id VARCHAR(200) PRIMARY KEY,
+	product_name VARCHAR(1000),
+	product_description VARCHAR(1000),
+	available INTEGER,
+	category_id INTEGER
 );
-INSERT INTO tblCategories(categoryId, categoryName) VALUES(%s, %s)
-INSERT INTO tblProducts(productId, productName, productDescription, available, categoryId) VALUES(%s, %s,%s, %s,%s)
+INSERT INTO tblCategories(category_id, category_name) VALUES(%s, %s)
+INSERT INTO tblProducts(product_id, product_name, product_description, available, category_id) VALUES(%s, %s,%s, %s,%s)

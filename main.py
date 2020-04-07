@@ -3,7 +3,7 @@ import urllib.request
 from Category import Category
 from Product import Product
 categories = Category.get_categories()
-Category.insert_categories_to_db()
+# Category.insert_categories_to_db(categories)
 for category in categories:
     products = Product.get_products(category.category_id)
-    Product.insert_products_to_db()
+    Product.insert_products_to_db(products)

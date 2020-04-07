@@ -27,8 +27,8 @@ class Category:
         return categories
 
     @staticmethod
-    def insert_categories_to_db():
-        categories = Category.get_categories()
+    def insert_categories_to_db(categories):
         for category in categories:
             database.insert_category(category.category_id, category.category_name)
+        print("Insert categories successfully")
 
