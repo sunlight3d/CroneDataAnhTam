@@ -46,12 +46,31 @@ class Product:
                 # save image to images
                 new_product = Product(product_id, product_name, available, image_name, image_url, category_id)
                 products.append(new_product)
+                database.insert_product(new_product.product_id,
+                                        new_product.product_name,
+                                        new_product.available,
+                                        new_product.image_name,
+                                        new_product.image_url,
+                                        new_product.category_id)
             except Exception as e:
                 import pdb
                 pdb.set_trace()
                 print("error creating product : "+str(e))
+        print("Insert products successfully for category_id : "+str(category_id))
+        return products
 
-        print("Insert products successfully for category_id : "+category_id)
+    @staticmethod
+    def get_products_from_db():
+        tuple_products = database.get_products()
+        products = []
+        for tuple_product in tuple_products:
+            product = Product(tuple_product[0],
+                              tuple_product[1],
+                              tuple_product[2],
+                              tuple_product[3],
+                              tuple_product[4],
+                              tuple_product[5])
+            products.append(product)
         return products
 
     @staticmethod
@@ -60,11 +79,17 @@ class Product:
             try:
                 image_url = product.image_url
                 image_name = product.image_name
-                urllib.request.urlretrieve(image_url, './images/' + image_name)
+                if 'http' in image_url:
+                    urllib.request.urlretrieve(image_url, './images/' + image_name)
             except Exception as e:
-                print("cannot save image: " + image_url+".Error: "+e)
+                print("Cannot save image: " + image_url+".Error: "+str(e))
     @staticmethod
     def insert_products_to_db(products):
         for product in products:
-            database.insert_product(product.product_id, product.product_name, "", product.available, product.category_id)
+            database.insert_product(product.product_id,
+                                    product.product_name,
+                                    product.available,
+                                    product.image_name,
+                                    product.image_url,
+                                    product.category_id)
 
