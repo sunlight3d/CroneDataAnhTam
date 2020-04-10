@@ -10,7 +10,7 @@ from Database import database
 import urllib.request
 from selenium.common.exceptions import TimeoutException
 from urls import URL_HOME, URL_LOGIN, URL_PRODUCT_DETAIL, URL_PRODUCT_LISTING
-
+import os
 class Product:
     def __init__(self, product_id, product_name, available, image_name, image_url, category_id):
         self.product_id = product_id
@@ -79,8 +79,12 @@ class Product:
             try:
                 image_url = product.image_url
                 image_name = product.image_name
+                i = 0
                 if 'http' in image_url:
-                    urllib.request.urlretrieve(image_url, './images/' + image_name)
+                    if not os.path.isfile('./images/' + image_name):
+                        urllib.request.urlretrieve(image_url, './images/' + image_name)
+                        i = i + 1
+                        print(str(i)+" - Saved file : "+image_name)
             except Exception as e:
                 print("Cannot save image: " + image_url+".Error: "+str(e))
     @staticmethod
