@@ -13,7 +13,7 @@ class Category:
         self.category_id = category_id
         
     @staticmethod
-    def get_categories():
+    def get_categories_and_save_to_db():
         login = Login()
         login.login()
         a_elements = driver.find_elements_by_xpath("//table[@class='categories']//child::a")
@@ -24,11 +24,7 @@ class Category:
             category_name = a_element.get_attribute('text')
             new_category = Category(category_name, category_id)
             categories.append(new_category)
+            database.insert_category(category_id, category_name)
+            print("Insert category with id = {}, name = {} to Database".format(category_id, category_name))
         return categories
-
-    @staticmethod
-    def insert_categories_to_db(categories):
-        for category in categories:
-            database.insert_category(category.category_id, category.category_name)
-        print("Insert categories successfully")
 

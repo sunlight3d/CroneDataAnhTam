@@ -22,7 +22,7 @@ class Product:
 
 
     @staticmethod
-    def get_products(category_id):
+    def get_products_and_save_to_db(category_id):
         link_to_products_page = URL_PRODUCT_LISTING+"RPP=1000&P=1&CID="+str(category_id)+"&IDS=&QTY="
         #"https://towneshops.directedje.com/Galardi/product-listing.asp?RPP=1000&P=1&CID=583&IDS=&QTY="
         try:
@@ -52,9 +52,8 @@ class Product:
                                         new_product.image_name,
                                         new_product.image_url,
                                         new_product.category_id)
+                print("Insert product with id = {}, name = {} to Database".format(new_product.product_id, new_product.product_name))
             except Exception as e:
-                import pdb
-                pdb.set_trace()
                 print("error creating product : "+str(e))
         print("Insert products successfully for category_id : "+str(category_id))
         return products
@@ -87,13 +86,5 @@ class Product:
                         print(str(i)+" - Saved file : "+image_name)
             except Exception as e:
                 print("Cannot save image: " + image_url+".Error: "+str(e))
-    @staticmethod
-    def insert_products_to_db(products):
-        for product in products:
-            database.insert_product(product.product_id,
-                                    product.product_name,
-                                    product.available,
-                                    product.image_name,
-                                    product.image_url,
-                                    product.category_id)
+
 

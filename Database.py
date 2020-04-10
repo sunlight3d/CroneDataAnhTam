@@ -23,11 +23,11 @@ class Database:
 	def insert_category( self, category_id, category_name ):
 		try:
 			sql = "INSERT INTO tblCategories(category_id, category_name) VALUES(?, ?)"
-			self.get_cursor().execute(sql, [category_id, category_name])
+			self.get_cursor().execute(sql, [str(category_id), category_name])
 			self.connection.commit()
 			self.connection.close()
 		except Exception as err:
-			print("Cannot insert category with id="+category_id+"category_name = "+category_name)
+			print("Cannot insert category with id={}, category_name = {}".format(category_id, category_name))
 			print(err)
 	def get_products(self):
 		try:
