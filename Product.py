@@ -19,8 +19,6 @@ class Product:
         self.image_name = image_name
         self.image_url = image_url
         self.category_id = category_id
-
-
     @staticmethod
     def get_products_and_save_to_db(category_id):
         link_to_products_page = URL_PRODUCT_LISTING+"RPP=1000&P=1&CID="+str(category_id)+"&IDS=&QTY="
@@ -59,8 +57,6 @@ class Product:
 
     @staticmethod
     def get_products_from_db():
-        import pdb
-        pdb.set_trace()
         tuple_products = database.get_products()
         products = []
         for tuple_product in tuple_products:
@@ -80,14 +76,11 @@ class Product:
             try:
                 product_id = product.product_id
                 image_url = product.image_url
-                import pdb
-                pdb.set_trace()
                 image_name = product_id + ".jpg"
-                if 'http' in image_url:
-                    if not os.path.isfile('./images/' + image_name):
-                        urllib.request.urlretrieve(image_url, './images/' + image_name)
-                        i = i + 1
-                        print(str(i)+" - Saved file : "+image_name)
+                if not os.path.isfile('./images/' + image_name):
+                    urllib.request.urlretrieve(image_url, './images/' + image_name)
+                    i = i + 1
+                    print(str(i) + " - Saved file : " + image_name)
             except Exception as e:
                 print("Cannot save image: " + image_name+".Error: "+str(e))
 
