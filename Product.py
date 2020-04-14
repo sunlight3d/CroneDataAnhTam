@@ -52,14 +52,15 @@ class Product:
                                         new_product.image_name,
                                         new_product.image_url,
                                         new_product.category_id)
-                print("Insert product with id = {}, name = {} to Database".format(new_product.product_id, new_product.product_name))
             except Exception as e:
                 print("error creating product : "+str(e))
-        print("Insert products successfully for category_id : "+str(category_id))
+        print("Finish insert products for category_id : "+str(category_id))
         return products
 
     @staticmethod
     def get_products_from_db():
+        import pdb
+        pdb.set_trace()
         tuple_products = database.get_products()
         products = []
         for tuple_product in tuple_products:
@@ -79,6 +80,8 @@ class Product:
             try:
                 product_id = product.product_id
                 image_url = product.image_url
+                import pdb
+                pdb.set_trace()
                 image_name = product_id + ".jpg"
                 if 'http' in image_url:
                     if not os.path.isfile('./images/' + image_name):

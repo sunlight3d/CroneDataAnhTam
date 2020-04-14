@@ -25,7 +25,6 @@ class Category:
             new_category = Category(category_name, category_id)
             categories.append(new_category)
             database.insert_category(category_id, category_name)
-            print("Insert category with id = {}, name = {} to Database".format(category_id, category_name))
         return categories
 
     @staticmethod
@@ -33,8 +32,7 @@ class Category:
         tuple_categories = database.get_categories()
         categories = []
         for tuple_category in tuple_categories:
-            category = Category(tuple_category[0],
-                              tuple_category[1])
+            category = Category(tuple_category[1],tuple_category[0])
             categories.append(category)
         return categories
 
