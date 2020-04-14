@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from urls import URL_HOME, URL_LOGIN, URL_PRODUCT_DETAIL, URL_PRODUCT_LISTING
 from driver import driver
+import re
 from Login import Login
 from Database import database
 import urllib.request
@@ -77,6 +78,7 @@ class Product:
                 product_id = product.product_id
                 image_url = product.image_url
                 image_name = product_id + ".jpg"
+                image_name = re.sub(r'\s+', '', image_name)
                 if not os.path.isfile('./images/' + image_name):
                     urllib.request.urlretrieve(image_url, './images/' + image_name)
                     i = i + 1
