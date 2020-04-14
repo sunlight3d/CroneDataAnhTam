@@ -79,7 +79,8 @@ class Product:
                 image_url = product.image_url
                 image_name = product_id + ".jpg"
                 image_name = re.sub(r'\s+', '', image_name)
-                if not os.path.isfile('./images/' + image_name):
+                image_name = re.sub(r'/', '-', image_name)
+                if not os.path.isfile('./images/' + image_name) and 'http' in image_url:
                     urllib.request.urlretrieve(image_url, './images/' + image_name)
                     i = i + 1
                     print(str(i) + " - Saved file : " + image_name)
