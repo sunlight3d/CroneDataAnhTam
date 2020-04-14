@@ -77,14 +77,15 @@ class Product:
         i = 0
         for product in products:
             try:
+                product_id = product.product_id
                 image_url = product.image_url
-                image_name = product.image_name
+                image_name = product_id + ".jpg"
                 if 'http' in image_url:
                     if not os.path.isfile('./images/' + image_name):
                         urllib.request.urlretrieve(image_url, './images/' + image_name)
                         i = i + 1
                         print(str(i)+" - Saved file : "+image_name)
             except Exception as e:
-                print("Cannot save image: "  + image_url+".Error: "+str(e))
+                print("Cannot save image: " + image_name+".Error: "+str(e))
 
 

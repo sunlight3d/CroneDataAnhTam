@@ -40,6 +40,17 @@ class Database:
 		except Exception as err:
 			print("Cannot get all products from DB. Error: "+str(err))
 			return []
+	def get_categories(self):
+		try:
+			sql = """SELECT * FROM tblCategories"""
+			cursor = self.get_cursor()
+			cursor.execute(sql, [])
+			dict_categories = cursor.fetchall()
+			self.connection.close()
+			return dict_categories
+		except Exception as err:
+			print("Cannot get all categories from DB. Error: "+str(err))
+			return []
 
 database = Database()
 

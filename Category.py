@@ -28,3 +28,13 @@ class Category:
             print("Insert category with id = {}, name = {} to Database".format(category_id, category_name))
         return categories
 
+    @staticmethod
+    def get_categories_from_db():
+        tuple_categories = database.get_categories()
+        categories = []
+        for tuple_category in tuple_categories:
+            category = Category(tuple_category[0],
+                              tuple_category[1])
+            categories.append(category)
+        return categories
+

@@ -5,6 +5,8 @@ __pycache__/
 images.zip
 images/
 images
+backup
+backup/
 images.zip
 # C extensions
 *.so
