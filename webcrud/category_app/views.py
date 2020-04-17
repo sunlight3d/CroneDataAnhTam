@@ -22,6 +22,17 @@ class CategoriesView(TemplateView):
 
     def delete(self, request, *args, **kwargs):
         params = QueryDict(request.body)
-        import pdb
-        pdb.set_trace()
+        category_id = params.get('category_id')
+        category_name = params.get('category_name')
+        TblCategory.objects.get(category_id=category_id).delete()
+        return self.get(request, self.template_name)
+
+    def put(self, request, *args, **kwargs):
+        params = QueryDict(request.body)
+        category_id = params.get('category_id')
+        category_name = params.get('category_name')
+        selected_category = TblCategory.objects.get(category_id=category_id)
+        selected_category.category_name = category_name
+        # import pdb
+        # pdb.set_trace()
         return self.get(request, self.template_name)
