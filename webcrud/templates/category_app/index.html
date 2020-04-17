@@ -23,12 +23,14 @@ function getSelectedCategory(category_id, category_name){
 }
 function deleteSelectedCategory() {
 	const { category_id, category_name } = selectedCategory
+	debugger
 	$.ajax({
 		type: 'DELETE',
 		url: '',
 		data: { category_id, category_name },
 		success: function() {
 		   console.log('deleted category'+category_id)
+		   location.reload()
 		},
 		failed: function(error) {
 		   console.log('Cannot deleted category'+category_id+'Error = '+error)
@@ -64,10 +66,8 @@ function onChangeCategoryName(value) {
 						<h2>Manage <b>Categories</b></h2>
 					</div>
 					<div class="col-sm-6">
-						<a href="#addCategoryModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Category</span></a>
-						<a href="#deleteCategoryModal"
-						   class="btn btn-danger" data-toggle="modal">
-							<i class="material-icons">&#xE15C;</i> <span>Delete</span>
+						<a href="#addCategoryModal" class="btn btn-success" data-toggle="modal">
+							<i class="material-icons">&#xE147;</i> <span>Add New Category</span>
 						</a>
 					</div>
                 </div>
@@ -206,7 +206,7 @@ function onChangeCategoryName(value) {
 						<input type="hidden" name="category_id" value="return selectedCategory.category_id;">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 <!--						<input type="submit" class="btn btn-danger" value="Delete">-->
-						<button class="btn btn-info" onclick="deleteSelectedCategory()">
+						<button class="btn btn-info" onclick="deleteSelectedCategory()" data-dismiss="modal">
 							{% csrf_token %}
 							Delete
 						</button>

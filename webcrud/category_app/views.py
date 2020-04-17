@@ -12,7 +12,7 @@ class CategoriesView(TemplateView):
     template_name = 'category_app/index.html'
 
     def get(self, request, *args, **kwargs):
-        categories = TblCategory.objects.filter(category_name__contains='')
+        categories = TblCategory.objects.filter(category_name__contains='').order_by('category_name')
         return render(request, self.template_name, {'categories': categories})
 
     def post(self, request, *args, **kwargs):
@@ -22,10 +22,16 @@ class CategoriesView(TemplateView):
 
     def delete(self, request, *args, **kwargs):
         params = QueryDict(request.body)
-        category_id = params.get('category_id')
+        # import pdb
+        # pdb.set_trace()
+        category_id = int(params.get('category_id'))
         category_name = params.get('category_name')
-        TblCategory.objects.get(category_id=category_id).delete()
-        return self.get(request, self.template_name)
+        selected_category = TblCategory.objects.get(category_id=category_id)
+        selected_category.delete()
+        # import pdb
+        # pdb.set_trace()
+        categories = TblCategory.objects.filter(category_name__contains='').order_by('category_name')
+        return render(request, self.template_name, {'categories': categories})
 
     def put(self, request, *args, **kwargs):
         params = QueryDict(request.body)
