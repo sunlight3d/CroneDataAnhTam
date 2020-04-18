@@ -16,8 +16,6 @@ class CategoriesView(TemplateView):
         return render(request, self.template_name, {'categories': categories})
 
     def post(self, request, *args, **kwargs):
-        import pdb
-        pdb.set_trace()
         new_category = TblCategory(int(request.POST['category_id']), request.POST['category_name'])
         new_category.save()
         return self.get(request, self.template_name)

@@ -8,4 +8,5 @@ from django.conf.urls import url,include
 urlpatterns = [
     path('admin/', admin.site.urls),
     url('^categories/', include('category_app.urls')),
+    url('^products/', include('product_app.urls')),
 ]

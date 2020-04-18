@@ -15,68 +15,68 @@ $.ajaxSetup({
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
     }
-});
+})
 
-var selectedCategory = {}
-function getSelectedCategory(category_id, category_name){
-	selectedCategory = {category_id, category_name}
+var selectedProduct = {}
+function getSelectedProduct(product_id, product_name){
+	selectedProduct = {product_id, product_name}
 }
-function addSelectedCategory() {
+function addSelectedProduct() {
 	debugger
-	const { category_id, category_name } = selectedCategory
-	if(category_name.length < 2 || category_id == null || isNaN(category_id)) {
+	const { product_id, product_name } = selectedProduct
+	if(product_name.length < 2 || product_id == null || isNaN(product_id)) {
 		location.reload()
 		return
 	}
 	$.ajax({
 		type: 'POST',
 		url: '',
-		data: { category_id, category_name },
+		data: { product_id, product_name },
 		success: function() {
-		   console.log(`inserted category: ${category_id} to name: ${category_name}`)
+		   console.log(`inserted product: ${product_id} to name: ${product_name}`)
 		   location.reload()
 		},
 		failed: function(error) {
-		   console.log('Cannot insert category'+category_name+'Error = '+error)
+		   console.log('Cannot insert product'+product_name+'Error = '+error)
 		   location.reload()
 		},
     })
 }
-function deleteSelectedCategory() {
-	const { category_id, category_name } = selectedCategory
+function deleteSelectedProduct() {
+	const { product_id, product_name } = selectedProduct
 	debugger
 	$.ajax({
 		type: 'DELETE',
 		url: '',
-		data: { category_id, category_name },
+		data: { product_id, product_name },
 		success: function() {
-		   console.log('deleted category'+category_id)
+		   console.log('deleted product'+product_id)
 		   location.reload()
 		},
 		failed: function(error) {
-		   console.log('Cannot deleted category'+category_id+'Error = '+error)
+		   console.log('Cannot deleted product'+product_id+'Error = '+error)
 		},
     })
 }
-function updateSelectedCategory() {
-	const { category_id, category_name } = selectedCategory
+function updateSelectedProduct() {
+	const { product_id, product_name } = selectedProduct
 	$.ajax({
 		type: 'PUT',
 		url: '',
-		data: { category_id, category_name },
+		data: { product_id, product_name },
 		success: function() {
-		   console.log(`updated category: ${category_id} to name: ${category_name}`)
+		   console.log(`updated product: ${product_id} to name: ${product_name}`)
 		},
 		failed: function(error) {
-		   console.log('Cannot update category'+category_id+'Error = '+error)
+		   console.log('Cannot update product'+product_id+'Error = '+error)
 		},
     })
 }
-function onChangeCategoryName(value) {
-	selectedCategory.category_name = value
+function onChangeProductName(value) {
+	selectedProduct.product_name = value
 }
-function onChangeCategoryId(value) {
-	selectedCategory.category_id = value
+function onChangeProductId(value) {
+	selectedProduct.product_id = value
 }
 </script>
 <script>
@@ -87,11 +87,11 @@ function onChangeCategoryId(value) {
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
-						<h2>Manage <b>Categories</b></h2>
+						<h2>Manage <b>Products</b></h2>
 					</div>
 					<div class="col-sm-6">
-						<a href="#addCategoryModal" class="btn btn-success" data-toggle="modal">
-							<i class="material-icons">&#xE147;</i> <span>Add New Category</span>
+						<a href="#addProductModal" class="btn btn-success" data-toggle="modal">
+							<i class="material-icons">&#xE147;</i> <span>Add New Product</span>
 						</a>
 					</div>
                 </div>
@@ -106,12 +106,12 @@ function onChangeCategoryId(value) {
 							</span>
 						</th>
                         <th>Id</th>
-                        <th>Category's Name</th>
+                        <th>Product's Name</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-					{% for category in categories %}
+					{% for product in categories %}
 						<tr>
 						<td>
 							<span class="custom-checkbox">
@@ -119,12 +119,12 @@ function onChangeCategoryId(value) {
 								<label for="checkbox1"></label>
 							</span>
 						</td>
-                        <td> {{category.category_id}}</td>
-                        <td> {{category.category_name}}</td>
+                        <td> {{product.product_id}}</td>
+                        <td> {{product.product_name}}</td>
                         <td>
-                            <a href="#editCategoryModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                            <a href="#deleteCategoryModal"
-							   onclick="getSelectedCategory('{{category.category_id}}', '{{category.category_name}}')"
+                            <a href="#editProductModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="#deleteProductModal"
+							   onclick="getSelectedProduct('{{product.product_id}}', '{{product.product_name}}')"
 							   class="delete" data-toggle="modal">
 								<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
 							</a>
@@ -149,31 +149,31 @@ function onChangeCategoryId(value) {
 </div>
 
 <!-- Edit Modal HTML -->
-<div id="addCategoryModal" class="modal fade">
+<div id="addProductModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div>
 					<div class="modal-header">
-						<h4 class="modal-title">Add Category</h4>
+						<h4 class="modal-title">Add Product</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label>Category's Id</label>
+							<label>Product's Id</label>
 							<input type="text" class="form-control"
-								   onchange="onChangeCategoryId(this.value);"
-								   name ="category_id" required >
+								   onchange="onChangeProductId(this.value);"
+								   name ="product_id" required >
 						</div>
 						<div class="form-group">
-							<label>Category's Name</label>
+							<label>Product's Name</label>
 							<input type="text" class="form-control"
-								   onchange="onChangeCategoryName(this.value);"
-								   name ="category_name" required>
+								   onchange="onChangeProductName(this.value);"
+								   name ="product_name" required>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<button type="button" class="btn btn-success" onclick="addSelectedCategory()">
+						<button type="button" class="btn btn-success" onclick="addSelectedProduct()">
 							{% csrf_token %}
 							Add
 						</button>
@@ -183,33 +183,33 @@ function onChangeCategoryId(value) {
 		</div>
 	</div>
 	<!-- Edit Modal HTML -->
-<div id="editCategoryModal" class="modal fade">
+<div id="editProductModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div>
 
 					<div class="modal-header">
-						<h4 class="modal-title">Edit Category</h4>
+						<h4 class="modal-title">Edit Product</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group" style="display: none">
-							<label>Category's Id</label>
-							<input type="hidden" class="form-control" name ="category_id"
-								   value="return selectedCategory.category_id;"required >
+							<label>Product's Id</label>
+							<input type="hidden" class="form-control" name ="product_id"
+								   value="return selectedProduct.product_id;"required >
 						</div>
 						<div class="form-group">
-							<label>Category's Name</label>
+							<label>Product's Name</label>
 							<input type="text" class="form-control"
-								   onchange="onChangeCategoryName(this.value);"
-								   value="return selectedCategory.category_name;"
-								   name ="category_name" required>
+								   onchange="onChangeProductName(this.value);"
+								   value="return selectedProduct.product_name;"
+								   name ="product_name" required>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 <!--						<input type="submit" class="btn btn-info" value="Save">-->
-						<button class="btn btn-info" onclick="updateSelectedCategory()">
+						<button class="btn btn-info" onclick="updateSelectedProduct()">
 							{% csrf_token %}
 							Save
 						</button>
@@ -219,13 +219,13 @@ function onChangeCategoryId(value) {
 		</div>
 	</div>
 	<!-- Delete Modal HTML -->
-<div id="deleteCategoryModal" class="modal fade">
+<div id="deleteProductModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div>
 					{% csrf_token %}
 					<div class="modal-header">
-						<h4 class="modal-title">Delete Category</h4>
+						<h4 class="modal-title">Delete Product</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
@@ -233,10 +233,10 @@ function onChangeCategoryId(value) {
 						<p class="text-warning"><small>This action cannot be undone.</small></p>
 					</div>
 					<div class="modal-footer">
-						<input type="hidden" name="category_id" value="return selectedCategory.category_id;">
+						<input type="hidden" name="product_id" value="return selectedProduct.product_id;">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 <!--						<input type="submit" class="btn btn-danger" value="Delete">-->
-						<button class="btn btn-info" onclick="deleteSelectedCategory()" data-dismiss="modal">
+						<button class="btn btn-info" onclick="deleteSelectedProduct()" data-dismiss="modal">
 							{% csrf_token %}
 							Delete
 						</button>
