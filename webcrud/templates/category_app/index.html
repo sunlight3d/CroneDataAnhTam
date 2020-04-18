@@ -21,6 +21,27 @@ var selectedCategory = {}
 function getSelectedCategory(category_id, category_name){
 	selectedCategory = {category_id, category_name}
 }
+function addSelectedCategory() {
+	debugger
+	const { category_id, category_name } = selectedCategory
+	if(category_name.length < 2 || category_id == null || isNaN(category_id)) {
+		location.reload()
+		return
+	}
+	$.ajax({
+		type: 'POST',
+		url: '',
+		data: { category_id, category_name },
+		success: function() {
+		   console.log(`inserted category: ${category_id} to name: ${category_name}`)
+		   location.reload()
+		},
+		failed: function(error) {
+		   console.log('Cannot insert category'+category_name+'Error = '+error)
+		   location.reload()
+		},
+    })
+}
 function deleteSelectedCategory() {
 	const { category_id, category_name } = selectedCategory
 	debugger
@@ -53,6 +74,9 @@ function updateSelectedCategory() {
 }
 function onChangeCategoryName(value) {
 	selectedCategory.category_name = value
+}
+function onChangeCategoryId(value) {
+	selectedCategory.category_id = value
 }
 </script>
 <script>
@@ -128,8 +152,7 @@ function onChangeCategoryName(value) {
 <div id="addCategoryModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="" method="post">
-					{% csrf_token %}
+				<div>
 					<div class="modal-header">
 						<h4 class="modal-title">Add Category</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -137,18 +160,25 @@ function onChangeCategoryName(value) {
 					<div class="modal-body">
 						<div class="form-group">
 							<label>Category's Id</label>
-							<input type="text" class="form-control" name ="category_id" required >
+							<input type="text" class="form-control"
+								   onchange="onChangeCategoryId(this.value);"
+								   name ="category_id" required >
 						</div>
 						<div class="form-group">
 							<label>Category's Name</label>
-							<input type="text" class="form-control" name ="category_name" required>
+							<input type="text" class="form-control"
+								   onchange="onChangeCategoryName(this.value);"
+								   name ="category_name" required>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-success" value="Add">
+						<button type="button" class="btn btn-success" onclick="addSelectedCategory()">
+							{% csrf_token %}
+							Add
+						</button>
 					</div>
-				</form>
+				</div>
 			</div>
 		</div>
 	</div>

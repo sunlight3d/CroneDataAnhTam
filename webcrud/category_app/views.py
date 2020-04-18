@@ -16,6 +16,8 @@ class CategoriesView(TemplateView):
         return render(request, self.template_name, {'categories': categories})
 
     def post(self, request, *args, **kwargs):
+        import pdb
+        pdb.set_trace()
         new_category = TblCategory(int(request.POST['category_id']), request.POST['category_name'])
         new_category.save()
         return self.get(request, self.template_name)
@@ -28,8 +30,6 @@ class CategoriesView(TemplateView):
         category_name = params.get('category_name')
         selected_category = TblCategory.objects.get(category_id=category_id)
         selected_category.delete()
-        # import pdb
-        # pdb.set_trace()
         categories = TblCategory.objects.filter(category_name__contains='').order_by('category_name')
         return render(request, self.template_name, {'categories': categories})
 
