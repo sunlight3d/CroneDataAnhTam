@@ -12,10 +12,8 @@ class ProductsView(TemplateView):
     template_name = 'product_app/index.html'
 
     def get(self, request, *args, **kwargs):
-        categories = TblProduct.objects.filter(product_name__contains='').order_by('product_name')
-        import pdb
-        pdb.set_trace()
-        return render(request, self.template_name, {'categories': categories})
+        products = TblProduct.objects.filter(product_name__contains='').order_by('product_name')        
+        return render(request, self.template_name, {'products': products})
 
     def post(self, request, *args, **kwargs):
         new_product = TblProduct(int(request.POST['product_id']), request.POST['product_name'])
@@ -30,8 +28,8 @@ class ProductsView(TemplateView):
         product_name = params.get('product_name')
         selected_product = TblProduct.objects.get(product_id=product_id)
         selected_product.delete()
-        categories = TblProduct.objects.filter(product_name__contains='').order_by('product_name')
-        return render(request, self.template_name, {'categories': categories})
+        products = TblProduct.objects.filter(product_name__contains='').order_by('product_name')
+        return render(request, self.template_name, {'products': products})
 
     def put(self, request, *args, **kwargs):
         params = QueryDict(request.body)
