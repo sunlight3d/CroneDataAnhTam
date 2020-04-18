@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% extends "base.html"%}
 {% block body_block %}
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 {% csrf_token %}
 <script>
@@ -78,6 +79,9 @@ function onChangeProductName(value) {
 function onChangeProductId(value) {
 	selectedProduct.product_id = value
 }
+function onChangeProductAvailable(value) {
+	selectedProduct.available = value
+}
 </script>
 <script>
 
@@ -120,7 +124,14 @@ function onChangeProductId(value) {
 							</span>
 						</td>
                         <td> {{product.product_id}}</td>
-                        <td> {{product.product_name}}</td>
+                        <td> 
+                        	<img src="static/images/{{product.image_name}}" class="rounded float-left" alt="no image">
+                        	<div>
+                        		<p class="text-left bg-success">{{product.product_id}}</p>
+                        		<p class="text-left bg-info">{{product.product_name}}</p>
+                        	</div>
+                        	
+                        </td>
                         <td>
                             <a href="#editProductModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                             <a href="#deleteProductModal"
@@ -170,6 +181,20 @@ function onChangeProductId(value) {
 								   onchange="onChangeProductName(this.value);"
 								   name ="product_name" required>
 						</div>
+						<div class="form-group">
+							<label>Product's Available</label>
+							<input type="text" class="form-control"
+								   onchange="onChangeProductAvailable(this.value)"
+								   name ="product_available" required>
+						</div>						
+						<form method="post" enctype="multipart/form-data">
+							{% csrf_token %}
+							<input type="file" name="myfile">
+							<button type="submit">Upload</button>
+						</form>
+						{% if uploaded_file_url %}
+						<p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+						{% endif %}
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -205,6 +230,12 @@ function onChangeProductId(value) {
 								   value="return selectedProduct.product_name;"
 								   name ="product_name" required>
 						</div>
+						<div class="form-group">
+							<label>Product's Available</label>
+							<input type="text" class="form-control"
+								   onchange="onChangeProductAvailable(this.value)"
+								   name ="product_available" required>
+						</div>						
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">

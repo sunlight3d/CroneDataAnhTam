@@ -16,7 +16,17 @@ class ProductsView(TemplateView):
         return render(request, self.template_name, {'products': products})
 
     def post(self, request, *args, **kwargs):
-        new_product = TblProduct(int(request.POST['product_id']), request.POST['product_name'])
+        image_name = ''
+        if request.method == 'POST' and request.FILES['myfile']:
+            myfile = request.FILES['myfile']
+            fs = FileSystemStorage()
+            image_name = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(image_name)            
+        new_product = TblProduct(product_id = int(request.POST['product_id']), \
+                                 product_name = request.POST['product_name'],
+                                 available = request.POST['product_available'],
+                                 image_name = image_name,
+                                 )
         new_product.save()
         return self.get(request, self.template_name)
 
