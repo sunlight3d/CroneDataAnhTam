@@ -22,24 +22,39 @@ var selectedProduct = {}
 function getSelectedProduct(product_id, product_name){
 	selectedProduct = {product_id, product_name}
 }
-function addSelectedProduct() {
-	debugger
-	const { product_id, product_name } = selectedProduct
+function addSelectedProduct() {	
+	const { product_id, product_name, product_available } = selectedProduct
 	if(product_name.length < 2 || product_id == null || isNaN(product_id)) {
 		location.reload()
 		return
 	}
+	var product_image_file = null
+	var formData = new FormData();                	
+	if($("#product_image_file").prop('files') != null && $("#product_image_file").prop('files').length > 0) {
+		product_image_file = $("#product_image_file").prop('files')[0]
+		formData.append('product_image_file',product_image_file);
+		
+	}			
+	formData.append('product_id', product_id)
+	formData.append('product_name', product_name)
+	formData.append('product_available', product_available)
+	formData.append('product_image_file',product_image_file);		
 	$.ajax({
 		type: 'POST',
 		url: '',
-		data: { product_id, product_name },
+		// data: { product_id, product_name, formData},
+		data:formData,		
+		contentType: false,
+		processData: false,
 		success: function() {
-		   console.log(`inserted product: ${product_id} to name: ${product_name}`)
-		   location.reload()
+			debugger
+			console.log(`inserted product: ${product_id} to name: ${product_name}`)
+			location.reload()
 		},
-		failed: function(error) {
-		   console.log('Cannot insert product'+product_name+'Error = '+error)
-		   location.reload()
+		error: function(error) {
+			debugger
+			console.log('Cannot insert product'+product_name+'Error = '+error)
+			location.reload()
 		},
     })
 }
@@ -80,7 +95,7 @@ function onChangeProductId(value) {
 	selectedProduct.product_id = value
 }
 function onChangeProductAvailable(value) {
-	selectedProduct.available = value
+	selectedProduct.product_available = value
 }
 </script>
 <script>
@@ -129,11 +144,11 @@ function onChangeProductAvailable(value) {
                         		style="display: inline-block;									  
 									  height: 100px;
 									  padding: 10px;
-									  border: 1px solid blue;" 
+									  marker-end: 10px;" 
                         		class="rounded float-left" alt="no image">
                         	<div style="display: inline-block;">
-                        		<p class="text-left bg-success">{{product.product_id}}</p>
-                        		<p class="text-left bg-info">{{product.product_name}}</p>
+                        		<p class="text-left text-success">{{product.product_id}}</p>
+                        		<p class="text-left text-info">{{product.product_name}}</p>
                         	</div>
                         	
                         </td>
@@ -194,12 +209,9 @@ function onChangeProductAvailable(value) {
 						</div>						
 						<form method="post" enctype="multipart/form-data">
 							{% csrf_token %}
-							<input type="file" name="myfile">
-							<button type="submit">Upload</button>
-						</form>
-						{% if uploaded_file_url %}
-						<p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
-						{% endif %}
+							<input type="file" name="myfile" id="product_image_file">
+							<!-- <button type="submit">Upload</button> -->
+						</form>						
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">

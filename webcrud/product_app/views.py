@@ -18,12 +18,14 @@ class ProductsView(TemplateView):
                     .order_by('product_name')        
         return render(request, self.template_name, {'products': products})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):        
         image_name = ''
-        if request.method == 'POST' and request.FILES['myfile']:
-            myfile = request.FILES['myfile']
+        import pdb
+        pdb.set_trace()        
+        if request.method == 'POST' and 'product_image_file' in request.FILES:
+            image_file = request.FILES['product_image_file']
             fs = FileSystemStorage()
-            image_name = fs.save(myfile.name, myfile)
+            image_name = fs.save('static/images/', image_file)
             uploaded_file_url = fs.url(image_name)            
         new_product = TblProduct(product_id = int(request.POST['product_id']), \
                                  product_name = request.POST['product_name'],
