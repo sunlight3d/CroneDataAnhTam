@@ -11,8 +11,11 @@ class ProductsView(TemplateView):
     http_method_names = ['get', 'post', 'put', 'delete']
     template_name = 'product_app/index.html'
 
-    def get(self, request, *args, **kwargs):
-        products = TblProduct.objects.filter(product_name__contains='').order_by('product_name')        
+    def get(self, request, *args, **kwargs):        
+        category_id = request.GET['category_id']
+        products = TblProduct.objects.filter(product_name__contains='')\
+                    .filter(category_id=category_id)\
+                    .order_by('product_name')        
         return render(request, self.template_name, {'products': products})
 
     def post(self, request, *args, **kwargs):

@@ -124,9 +124,14 @@ function onChangeProductAvailable(value) {
 							</span>
 						</td>
                         <td> {{product.product_id}}</td>
-                        <td> 
-                        	<img src="static/images/{{product.image_name}}" class="rounded float-left" alt="no image">
-                        	<div>
+                        <td>                         	
+                        	<img src="../static/images/{{product.get_image_name}}" 
+                        		style="display: inline-block;									  
+									  height: 100px;
+									  padding: 10px;
+									  border: 1px solid blue;" 
+                        		class="rounded float-left" alt="no image">
+                        	<div style="display: inline-block;">
                         		<p class="text-left bg-success">{{product.product_id}}</p>
                         		<p class="text-left bg-info">{{product.product_name}}</p>
                         	</div>

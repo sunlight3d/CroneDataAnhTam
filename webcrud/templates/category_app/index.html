@@ -120,7 +120,7 @@ function onChangeCategoryId(value) {
 							</span>
 						</td>
                         <td> {{category.category_id}}</td>
-                        <td> {{category.category_name}}</td>
+                        <td> <a href="/products?category_id={{category.category_id}}">{{category.category_name}}</a></td>
                         <td>
                             <a href="#editCategoryModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                             <a href="#deleteCategoryModal"
