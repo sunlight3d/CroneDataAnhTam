@@ -2,9 +2,12 @@
 {% extends "base.html"%}
 {% block body_block %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 {% csrf_token %}
-<script>
+<script>	
+function showBigImage(urlImage){
+	$('#imagepreview').attr('src', urlImage); // here asign the image to the modal when the user click the enlarge link
+	$('#imagemodal').modal();
+}
 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
@@ -97,10 +100,7 @@ function onChangeProductId(value) {
 function onChangeProductAvailable(value) {
 	selectedProduct.product_available = value
 }
-$("#pop").on("click", function() {
-   $('#imagepreview').attr('src', $('#imageresource').attr('src')); // here asign the image to the modal when the user click the enlarge link
-   $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
-})
+
 </script>
 <script>
 
@@ -144,16 +144,14 @@ $("#pop").on("click", function() {
 						</td>
                         <td> {{product.product_id}}</td>
                         <td>                    
-                        	<a href="#" id="pop">     	
-	                        	<img src="../static/images/{{product.get_image_name}}" 
-	                        		id="imageresource"
-	                        		style="display: inline-block;									  
-										  height: 100px;
-										  padding: 10px;
-										  marker-end: 10px;" 
-	                        		class="rounded float-left" alt="no image">
-	                        	Click to Enlarge
-                        	</a>
+                        	<img src="../static/images/{{product.get_image_name}}" 
+		                        	id="imageresource"
+		                        	onclick="showBigImage('../static/images/{{product.get_image_name}}');" 
+		                        	style="display: inline-block;									  
+		                        	height: 100px;
+		                        	padding: 10px;
+		                        	marker-end: 10px;" 
+		                        	class="rounded float-left" alt="no image">
                         	<div style="display: inline-block;">
                         		<p class="text-left text-success">{{product.product_id}}</p>
                         		<p class="text-left text-info">{{product.product_name}}</p>
@@ -301,9 +299,9 @@ $("#pop").on("click", function() {
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>	
 	<!-- Creates the bootstrap modal where the image will appear -->
-	<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="imagemodal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -311,7 +309,7 @@ $("#pop").on("click", function() {
 					<h4 class="modal-title" id="myModalLabel">Image preview</h4>
 				</div>
 				<div class="modal-body">
-					<img src="" id="imagepreview" style="width: 400px; height: 264px;" >
+					<img class="img-responsive" src="" id="imagepreview" style="height:600px; ưi">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
