@@ -22,8 +22,8 @@ $.ajaxSetup({
 })
 
 var selectedProduct = {}
-function getSelectedProduct(product_id, product_name){
-	selectedProduct = {product_id, product_name}
+function getSelectedProduct(product_id, product_name, image_name, available){
+	selectedProduct = {product_id, product_name, image_name, available}
 }
 function addSelectedProduct() {	
 	const { product_id, product_name, product_available } = selectedProduct
@@ -162,7 +162,7 @@ function onChangeProductAvailable(value) {
                         <td>
                             <a href="#editProductModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                             <a href="#deleteProductModal"
-							   onclick="getSelectedProduct('{{product.product_id}}', '{{product.product_name}}')"
+							   onclick="getSelectedProduct('{{product.product_id}}', '{{product.product_name}}', '{{product.image_name}}','{{product.available}}')"
 							   class="delete" data-toggle="modal">
 								<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
 							</a>
@@ -245,21 +245,27 @@ function onChangeProductAvailable(value) {
 						<div class="form-group" style="display: none">
 							<label>Product's Id</label>
 							<input type="hidden" class="form-control" name ="product_id"
-								   value="return selectedProduct.product_id;"required >
+								   value="{{selectedProduct.product_id}}"required >
 						</div>
 						<div class="form-group">
 							<label>Product's Name</label>
 							<input type="text" class="form-control"
 								   onchange="onChangeProductName(this.value);"
-								   value="return selectedProduct.product_name;"
+								   value="selectedProduct.product_name"
 								   name ="product_name" required>
 						</div>
 						<div class="form-group">
 							<label>Product's Available</label>
 							<input type="text" class="form-control"
 								   onchange="onChangeProductAvailable(this.value)"
+								   value="selectedProduct.available"
 								   name ="product_available" required>
-						</div>						
+						</div>			
+						<form method="post" enctype="multipart/form-data">
+							{% csrf_token %}
+							<input type="file" name="myfile" id="product_image_file">
+							<!-- <button type="submit">Upload</button> -->
+						</form>									
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">

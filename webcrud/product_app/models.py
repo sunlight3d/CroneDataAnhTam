@@ -13,11 +13,11 @@ class TblProduct(models.Model):
     category_id = models.IntegerField(blank=True, null=True)
 
     @property
-    def get_image_name(self):                
+    def get_image_name(self):                        
         my_image_name = self.product_id + ".jpg"
         my_image_name = re.sub(r'\s+', '', my_image_name)
         my_image_name = re.sub(r'/', '-', my_image_name)        
-        if finders.find('images/'+my_image_name) is None:
+        if finders.find('images/'+my_image_name) is None:            
             return 'noimage.jpg'
         return my_image_name
     
