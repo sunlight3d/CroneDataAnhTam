@@ -41,7 +41,10 @@ function addSelectedProduct() {
 	formData.append('product_id', product_id)
 	formData.append('product_name', product_name)
 	formData.append('product_available', product_available)
-	formData.append('product_image_file',product_image_file);		
+	if (product_image_file != null) {
+		formData.append('product_image_file',product_image_file)		
+	}
+	formData.append('type','insert');		
 	$.ajax({
 		type: 'POST',
 		url: '',
@@ -77,17 +80,43 @@ function deleteSelectedProduct() {
 		},
     })
 }
-function updateSelectedProduct() {
-	const { product_id, product_name } = selectedProduct
+function updateSelectedProduct() {		
+	const { product_id, product_name, product_available } = selectedProduct
+	if(product_name.length < 2 || product_id == null || isNaN(product_id)) {
+		location.reload()
+		return
+	}
+	var product_image_file = null
+	var formData = new FormData();                	
+	if($("#product_image_file2").prop('files') != null && $("#product_image_file2").prop('files').length > 0) {
+		product_image_file = $("#product_image_file2").prop('files')[0]
+		formData.append('product_image_file',product_image_file);
+		
+	}			
+	formData.append('product_id', product_id)
+	formData.append('product_name', product_name)
+	formData.append('product_available', product_available)
+	debugger
+	if (product_image_file != null) {
+		formData.append('product_image_file',product_image_file)		
+	}		
+	formData.append('type','update');		
 	$.ajax({
-		type: 'PUT',
+		type: 'POST',
 		url: '',
-		data: { product_id, product_name },
+		// data: { product_id, product_name, formData},
+		data:formData,		
+		contentType: false,
+		processData: false,
 		success: function() {
-		   console.log(`updated product: ${product_id} to name: ${product_name}`)
+			debugger
+			console.log(`update product: ${product_id} successful`)
+			location.reload()
 		},
-		failed: function(error) {
-		   console.log('Cannot update product'+product_id+'Error = '+error)
+		error: function(error) {
+			debugger
+			console.log('Cannot update product'+product_name+'Error = '+error)
+			location.reload()
 		},
     })
 }
@@ -100,7 +129,16 @@ function onChangeProductId(value) {
 function onChangeProductAvailable(value) {
 	selectedProduct.product_available = value
 }
-
+function pressaEditProductModal(_selectedProduct) {	
+	selectedProduct = _selectedProduct
+	$("#editProductModal #product_id").val(selectedProduct.product_id)
+	$("#editProductModal #product_name").val(selectedProduct.product_name)
+	$("#editProductModal #product_available").val(selectedProduct.product_available)
+	$("#editProductModal").modal()
+}
+$(document).ready(function() {
+	
+})
 </script>
 <script>
 
@@ -160,7 +198,13 @@ function onChangeProductAvailable(value) {
                         	
                         </td>
                         <td>
-                            <a href="#editProductModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a id="aEditProductModal" 
+                            	onclick="pressaEditProductModal({
+                            		product_id: '{{product.product_id}}', 
+	                            	product_name: '{{product.product_name}}', 
+	                            	image_name: '{{product.image_name}}',
+	                            	product_available: '{{product.available}}'})" 
+                            	class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                             <a href="#deleteProductModal"
 							   onclick="getSelectedProduct('{{product.product_id}}', '{{product.product_name}}', '{{product.image_name}}','{{product.available}}')"
 							   class="delete" data-toggle="modal">
@@ -245,25 +289,26 @@ function onChangeProductAvailable(value) {
 						<div class="form-group" style="display: none">
 							<label>Product's Id</label>
 							<input type="hidden" class="form-control" name ="product_id"
-								   value="{{selectedProduct.product_id}}"required >
+								   id="product_id"
+								   required >
 						</div>
 						<div class="form-group">
 							<label>Product's Name</label>
 							<input type="text" class="form-control"
-								   onchange="onChangeProductName(this.value);"
-								   value="selectedProduct.product_name"
-								   name ="product_name" required>
+									id="product_name"						
+									onchange="onChangeProductName(this.value);"									
+									name ="product_name" required>
 						</div>
 						<div class="form-group">
 							<label>Product's Available</label>
 							<input type="text" class="form-control"
-								   onchange="onChangeProductAvailable(this.value)"
-								   value="selectedProduct.available"
+									id="product_available"
+								   onchange="onChangeProductAvailable(this.value)"								   
 								   name ="product_available" required>
 						</div>			
 						<form method="post" enctype="multipart/form-data">
 							{% csrf_token %}
-							<input type="file" name="myfile" id="product_image_file">
+							<input type="file" name="myfile" id="product_image_file2">
 							<!-- <button type="submit">Upload</button> -->
 						</form>									
 					</div>
@@ -293,8 +338,7 @@ function onChangeProductAvailable(value) {
 						<p>Are you sure you want to delete this?</p>
 						<p class="text-warning"><small>This action cannot be undone.</small></p>
 					</div>
-					<div class="modal-footer">
-						<input type="hidden" name="product_id" value="return selectedProduct.product_id;">
+					<div class="modal-footer">						
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 <!--						<input type="submit" class="btn btn-danger" value="Delete">-->
 						<button class="btn btn-info" onclick="deleteSelectedProduct()" data-dismiss="modal">
