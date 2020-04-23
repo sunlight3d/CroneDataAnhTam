@@ -13,10 +13,14 @@ class ProductsView(TemplateView):
     http_method_names = ['get', 'post', 'put', 'delete']
     template_name = 'product_app/index.html'    
 
-    def get(self, request, *args, **kwargs):                    
-        products = TblProduct.objects.filter(product_name__contains='')\
-                    .filter(category_id=request.GET['category_id'])\
-                    .order_by('product_name')        
+    def get(self, request, *args, **kwargs):                            
+        if 'category_id' in request.GET:
+            products = TblProduct.objects.filter(product_name__contains='')\
+                        .filter(category_id=request.GET['category_id'])\
+                        .order_by('product_name')        
+        else:
+            products = TblProduct.objects.filter(product_name__contains='')\
+                        .order_by('product_name')
         return render(request, self.template_name, {'products': products})
 
     def handle_uploaded_file(self, image_file, image_path):                
@@ -27,6 +31,8 @@ class ProductsView(TemplateView):
 
     def post(self, request, *args, **kwargs):        
         image_name = ''           
+        import pdb
+        pdb.set_trace()
         if request.method == 'POST' and 'product_image_file' in request.FILES:
             image_file = request.FILES['product_image_file']              
             # image_name = str(request.POST['product_id']) + "." + image_file.name.split('.')[-1]              
@@ -53,10 +59,12 @@ class ProductsView(TemplateView):
                         os.remove(image_path)
                     selected_product.image_name = image_name       
                 selected_product.save()
-        elif request.POST['type'] == 'search':
-            products = TblProduct.objects.filter(product_name__contains=request.POST['search_text'])\
-                    .filter(category_id=request.GET['category_id'])\
-                    .order_by('product_name')        
+        elif request.POST['type'] == 'search':            
+            products = TblProduct.objects.filter( Q(product_name__contains=request.POST['search_text']) |\
+                         Q(product_id__contains=request.POST['search_text']))\
+                        .order_by('product_name') 
+            if 'category_id' in request.GET:
+                products = products.filter(category_id=request.GET['category_id'])
             return render(request, self.template_name, {'products': products})
 
         return self.get(request, self.template_name)
