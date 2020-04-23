@@ -13,13 +13,14 @@ from selenium.common.exceptions import TimeoutException
 from urls import URL_HOME, URL_LOGIN, URL_PRODUCT_DETAIL, URL_PRODUCT_LISTING
 import os
 class Product:
-    def __init__(self, product_id, product_name, available, image_name, image_url, category_id):
+    def __init__(self, product_id, product_name, available, image_name, image_url, category_id,description):
         self.product_id = product_id
         self.product_name = product_name
         self.available = available
         self.image_name = image_name
         self.image_url = image_url
         self.category_id = category_id
+        self.description = description
     @staticmethod
     def get_products_and_save_to_db(category_id):
         link_to_products_page = URL_PRODUCT_LISTING+"RPP=1000&P=1&CID="+str(category_id)+"&IDS=&QTY="
@@ -36,6 +37,7 @@ class Product:
                 product_id = temp[0]
                 product_name = r'{}'.format(temp[2])
                 available = temp[4].split(" ")[0] if "Available" in temp[4] else 0
+                description = '{}'.format(temp[3])                
                 try:
                     image_url = product_element.find_element_by_class_name('thickbox').get_attribute('href')
                     image_name = image_url.split("/")[-1]
@@ -43,14 +45,15 @@ class Product:
                     image_url = ""
                     image_name = ""
                 # save image to images
-                new_product = Product(product_id, product_name, available, image_name, image_url, category_id)
+                new_product = Product(product_id, product_name, available, image_name, image_url, category_id, description)
                 products.append(new_product)
                 database.insert_product(new_product.product_id,
                                         new_product.product_name,
                                         new_product.available,
                                         new_product.image_name,
                                         new_product.image_url,
-                                        new_product.category_id)
+                                        new_product.category_id,
+                                        new_product.description)
             except Exception as e:
                 print("error creating product : "+str(e))
         print("Finish insert products for category_id : "+str(category_id))
@@ -60,13 +63,14 @@ class Product:
     def get_products_from_db():
         tuple_products = database.get_products()
         products = []
-        for tuple_product in tuple_products:
+        for tuple_product in tuple_products:            
             product = Product(tuple_product[0],
                               tuple_product[1],
                               tuple_product[2],
                               tuple_product[3],
                               tuple_product[4],
-                              tuple_product[5])
+                              tuple_product[5], 
+                              tuple_product[6])
             products.append(product)
         return products
 

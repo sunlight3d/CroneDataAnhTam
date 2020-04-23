@@ -22,11 +22,12 @@ $.ajaxSetup({
 })
 
 var selectedProduct = {}
-function getSelectedProduct(product_id, product_name, image_name, available){
-	selectedProduct = {product_id, product_name, image_name, available}
+function getSelectedProduct(objProduct){
+	selectedProduct = objProduct
+	selectedProduct.product_available = objProduct.available
 }
 function addSelectedProduct() {	
-	const { product_id, product_name, product_available } = selectedProduct
+	const { product_id, product_name,available,product_available } = selectedProduct
 	if(product_name.length < 2 || product_id == null || isNaN(product_id)) {
 		location.reload()
 		return
@@ -40,6 +41,7 @@ function addSelectedProduct() {
 	}			
 	formData.append('product_id', product_id)
 	formData.append('product_name', product_name)
+	formData.append('description', description)
 	formData.append('product_available', product_available)
 	if (product_image_file != null) {
 		formData.append('product_image_file',product_image_file)		
@@ -81,7 +83,7 @@ function deleteSelectedProduct() {
     })
 }
 function updateSelectedProduct() {		
-	const { product_id, product_name, product_available } = selectedProduct
+	const { product_id, product_name,description, product_available } = selectedProduct
 	if(product_name.length < 2 || product_id == null || isNaN(product_id)) {
 		location.reload()
 		return
@@ -95,6 +97,7 @@ function updateSelectedProduct() {
 	}			
 	formData.append('product_id', product_id)
 	formData.append('product_name', product_name)
+	formData.append('description', description)
 	formData.append('product_available', product_available)
 	debugger
 	if (product_image_file != null) {
@@ -128,6 +131,9 @@ function onChangeProductId(value) {
 }
 function onChangeProductAvailable(value) {
 	selectedProduct.product_available = value
+}
+function onChangeProductDescription(value) {
+	selectedProduct.description = value
 }
 function pressaEditProductModal(_selectedProduct) {	
 	selectedProduct = _selectedProduct
@@ -193,6 +199,7 @@ $(document).ready(function() {
                         	<div style="display: inline-block;">
                         		<p class="text-left text-success">{{product.product_id}}</p>
                         		<p class="text-left text-info">{{product.product_name}}</p>
+                        		<p class="text-left text-info">{{product.description}}</p>
                         		<p class="text-left text-info">Available: {{product.available}}</p>
                         	</div>
                         	
@@ -202,11 +209,17 @@ $(document).ready(function() {
                             	onclick="pressaEditProductModal({
                             		product_id: '{{product.product_id}}', 
 	                            	product_name: '{{product.product_name}}', 
+	                            	description:'{{product.description}}',
 	                            	image_name: '{{product.image_name}}',
 	                            	product_available: '{{product.available}}'})" 
                             	class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                             <a href="#deleteProductModal"
-							   onclick="getSelectedProduct('{{product.product_id}}', '{{product.product_name}}', '{{product.image_name}}','{{product.available}}')"
+							   onclick="getSelectedProduct({
+							   		product_id:'{{product.product_id}}', 
+							   		product_name:'{{product.product_name}}',
+							   		description:'{{product.description}}',
+							   		image_name: '{{product.image_name}}',
+							   		available: '{{product.available}}'})"
 							   class="delete" data-toggle="modal">
 								<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
 							</a>
@@ -253,11 +266,18 @@ $(document).ready(function() {
 								   name ="product_name" required>
 						</div>
 						<div class="form-group">
+							<label>Product's Description</label>
+							<input type="text" class="form-control"
+									id="product_available"
+								   onchange="onChangeProducDescription(this.value)"								   
+								   name ="product_description">
+						</div>					
+						<div class="form-group">
 							<label>Product's Available</label>
 							<input type="text" class="form-control"
 								   onchange="onChangeProductAvailable(this.value)"
 								   name ="product_available" required>
-						</div>						
+						</div>										
 						<form method="post" enctype="multipart/form-data">
 							{% csrf_token %}
 							<input type="file" name="myfile" id="product_image_file">
@@ -305,6 +325,13 @@ $(document).ready(function() {
 									id="product_available"
 								   onchange="onChangeProductAvailable(this.value)"								   
 								   name ="product_available" required>
+						</div>			
+						<div class="form-group">
+							<label>Product's Description</label>
+							<input type="text" class="form-control"
+									id="product_available"
+								   onchange="onChangeProducDescription(this.value)"								   
+								   name ="product_description">
 						</div>			
 						<form method="post" enctype="multipart/form-data">
 							{% csrf_token %}

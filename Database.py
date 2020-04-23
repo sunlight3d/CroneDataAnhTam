@@ -24,14 +24,14 @@ class Database:
             print("Cannot get tblProducts from DB. Error: " + str(err))
             return False
 
-    def insert_product(self, product_id, product_name, available, image_name, image_url, category_id):
+    def insert_product(self, product_id, product_name, available, image_name, image_url, category_id, description):
         try:
             if self.is_exist_category(product_id, product_name):
                 print("product with id={}, product_name = {} exists".format(product_id, product_name))
             else:
-                sql = "INSERT INTO tblProducts(product_id, product_name, available, image_name, image_url,category_id)"+\
-                      """ VALUES(?,?,?,?,?,?)"""
-                self.get_cursor().execute(sql, [product_id, product_name, available, image_name, image_url, category_id])
+                sql = "INSERT INTO tblProducts(product_id, product_name, available, image_name, image_url,category_id,description)"+\
+                      """ VALUES(?,?,?,?,?,?,?)"""
+                self.get_cursor().execute(sql, [product_id, product_name, available, image_name, image_url, category_id, description])
                 self.connection.commit()
                 self.connection.close()
                 print("Inserted product with id={}, product_name = {}".format(product_id, product_name))
@@ -68,7 +68,7 @@ class Database:
 
     def get_products(self):
         try:
-            sql = """SELECT * FROM tblProducts"""
+            sql = """SELECT product_id, product_name, available, image_name, image_url, category_id,description FROM tblProducts"""
             cursor = self.get_cursor()
             cursor.execute(sql, [])
             dict_products = cursor.fetchall()

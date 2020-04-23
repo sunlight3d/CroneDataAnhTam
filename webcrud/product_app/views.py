@@ -36,6 +36,7 @@ class ProductsView(TemplateView):
         if request.POST['type'] == 'insert':            
             new_product = TblProduct(product_id = request.POST['product_id'], \
                                      product_name = request.POST['product_name'],\
+                                     description = request.POST['description'],\
                                      available = request.POST['product_available'],\
                                      image_name = image_name,\
                                      category_id = int(request.GET['category_id']))
@@ -44,6 +45,7 @@ class ProductsView(TemplateView):
             selected_product = TblProduct.objects.get(product_id=request.POST['product_id'])            
             if selected_product is not None:
                 selected_product.product_name = request.POST['product_name']        
+                selected_product.description = request.POST['description']        
                 selected_product.available = request.POST['product_available']  
                 if image_name.strip() != '' and selected_product.image_name.strip() != image_name.strip():                
                     image_path = os.path.join(os.path.abspath('.'), 'static/images/' + selected_product.image_name)                      
