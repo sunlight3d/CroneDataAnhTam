@@ -137,7 +137,8 @@ function onChangeProductDescription(value) {
 	selectedProduct.description = value
 }
 function pressaEditProductModal(_selectedProduct) {	
-	selectedProduct = _selectedProduct
+	debugger
+	selectedProduct = _selectedProduct	
 	$("#editProductModal #product_id").val(selectedProduct.product_id)
 	$("#editProductModal #product_name").val(selectedProduct.product_name)
 	$("#editProductModal #description").val(selectedProduct.description)
@@ -214,7 +215,7 @@ $(document).ready(function() {
 	                            	product_name: '{{product.product_name}}', 
 	                            	description:'{{product.description}}',
 	                            	image_name: '{{product.image_name}}',
-	                            	product_available: '{{product.available}}'})" 
+	                            	product_available: '{{product.available}}'});" 
                             	class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                             <a href="#deleteProductModal"
 							   onclick="getSelectedProduct({
