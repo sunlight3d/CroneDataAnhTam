@@ -22,6 +22,7 @@ $.ajaxSetup({
 })
 
 var selectedProduct = {}
+var search_text = ""
 function getSelectedProduct(objProduct){
 	debugger
 	selectedProduct = objProduct
@@ -124,6 +125,33 @@ function updateSelectedProduct() {
 		},
     })
 }
+function searchProduct() {			
+	if(search_text.trim() == '') {
+		location.reload()
+		return
+	}	
+	var formData = new FormData();                	
+	formData.append('search_text', search_text)		
+	formData.append('type','search');		
+	$.ajax({
+		type: 'POST',
+		url: '',
+		// data: { product_id, product_name, formData},
+		data:formData,		
+		contentType: false,
+		processData: false,
+		success: function() {
+			debugger
+			console.log(`search/filter product: ${product_id} successful`)
+			location.reload()
+		},
+		error: function(error) {
+			debugger
+			console.log('Cannot search product'+product_name+'Error = '+error)
+			location.reload()
+		},
+    })
+}
 function onChangeProductName(value) {
 	selectedProduct.product_name = value
 }
@@ -136,6 +164,10 @@ function onChangeProductAvailable(value) {
 function onChangeProductDescription(value) {
 	selectedProduct.description = value
 }
+function onChangeSearchText(value) {
+	search_text = value
+}
+
 function pressaEditProductModal(_selectedProduct) {	
 	debugger
 	selectedProduct = _selectedProduct	
@@ -156,10 +188,24 @@ $(document).ready(function() {
 	<div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
 						<h2>Manage <b>Products</b></h2>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-4">
+						<div class="input-group">
+							<input type="text" 
+								class="form-control" placeholder="Enter text to search" 						
+								onchange="onChangeSearchText(this.value);"
+								name ="search_text">
+							<div class="input-group-btn">
+								<button class="btn btn-info" type="submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+						
+					</div>					
+					<div class="col-sm-4">
 						<a href="#addProductModal" class="btn btn-success" data-toggle="modal">
 							<i class="material-icons">&#xE147;</i> <span>Add New Product</span>
 						</a>

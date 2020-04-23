@@ -53,6 +53,12 @@ class ProductsView(TemplateView):
                         os.remove(image_path)
                     selected_product.image_name = image_name       
                 selected_product.save()
+        elif request.POST['type'] == 'search':
+            products = TblProduct.objects.filter(product_name__contains=request.POST['search_text'])\
+                    .filter(category_id=request.GET['category_id'])\
+                    .order_by('product_name')        
+            return render(request, self.template_name, {'products': products})
+
         return self.get(request, self.template_name)
 
     def delete(self, request, *args, **kwargs):
