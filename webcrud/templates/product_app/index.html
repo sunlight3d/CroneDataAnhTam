@@ -23,6 +23,7 @@ $.ajaxSetup({
 
 var selectedProduct = {}
 function getSelectedProduct(objProduct){
+	debugger
 	selectedProduct = objProduct
 	selectedProduct.product_available = objProduct.available
 }
@@ -139,6 +140,7 @@ function pressaEditProductModal(_selectedProduct) {
 	selectedProduct = _selectedProduct
 	$("#editProductModal #product_id").val(selectedProduct.product_id)
 	$("#editProductModal #product_name").val(selectedProduct.product_name)
+	$("#editProductModal #description").val(selectedProduct.description)
 	$("#editProductModal #product_available").val(selectedProduct.product_available)
 	$("#editProductModal").modal()
 }
@@ -187,22 +189,23 @@ $(document).ready(function() {
 							</span>
 						</td>
                         <td> {{product.product_id}}</td>
-                        <td>                    
-                        	<img src="../static/images/{{product.get_image_name}}" 
-		                        	id="imageresource"
-		                        	onclick="showBigImage('../static/images/{{product.get_image_name}}');" 
-		                        	style="display: inline-block;									  
-		                        	height: 100px;
-		                        	padding: 10px;
-		                        	marker-end: 10px;" 
-		                        	class="rounded float-left" alt="no image">
-                        	<div style="display: inline-block;">
-                        		<p class="text-left text-success">{{product.product_id}}</p>
-                        		<p class="text-left text-info">{{product.product_name}}</p>
-                        		<p class="text-left text-info">{{product.description}}</p>
-                        		<p class="text-left text-info">Available: {{product.available}}</p>
+                        <td>
+                        	<div style="display: flex; flex-direction: row; align-items: flex-start;">                    
+                        		<img src="../static/images/{{product.get_image_name}}" 
+                        		id="imageresource"
+                        		onclick="showBigImage('../static/images/{{product.get_image_name}}');" 
+                        		style="display: inline-block;									  
+                        		height: 100px;
+                        		padding: 10px;
+                        		marker-end: 10px;" 
+                        		class="rounded float-left" alt="no image">
+                        		<div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        			<p class="text-left text-success">{{product.product_id}}</p>
+                        			<p class="text-left text-info">{{product.product_name}}</p>
+                        			<p class="text-left text-info">{{product.description}}</p>
+                        			<p class="text-left text-info">Available: {{product.available}}</p>
+                        		</div>
                         	</div>
-                        	
                         </td>
                         <td>
                             <a id="aEditProductModal" 
@@ -270,7 +273,7 @@ $(document).ready(function() {
 							<input type="text" class="form-control"
 									id="product_available"
 								   onchange="onChangeProducDescription(this.value)"								   
-								   name ="product_description">
+								   name ="description">
 						</div>					
 						<div class="form-group">
 							<label>Product's Available</label>
@@ -331,7 +334,7 @@ $(document).ready(function() {
 							<input type="text" class="form-control"
 									id="product_available"
 								   onchange="onChangeProducDescription(this.value)"								   
-								   name ="product_description">
+								   name ="description">
 						</div>			
 						<form method="post" enctype="multipart/form-data">
 							{% csrf_token %}
