@@ -5,6 +5,7 @@ from django.http import HttpResponse
 import datetime
 import urllib.request
 import os
+from django.db.models import Q
 
 from .models import TblProduct
 
@@ -30,9 +31,7 @@ class ProductsView(TemplateView):
             destination.close()
 
     def post(self, request, *args, **kwargs):        
-        image_name = ''           
-        import pdb
-        pdb.set_trace()
+        image_name = ''                   
         if request.method == 'POST' and 'product_image_file' in request.FILES:
             image_file = request.FILES['product_image_file']              
             # image_name = str(request.POST['product_id']) + "." + image_file.name.split('.')[-1]              
@@ -60,12 +59,14 @@ class ProductsView(TemplateView):
                     selected_product.image_name = image_name       
                 selected_product.save()
         elif request.POST['type'] == 'search':            
+            import pdb
+            pdb.set_trace()
             products = TblProduct.objects.filter( Q(product_name__contains=request.POST['search_text']) |\
                          Q(product_id__contains=request.POST['search_text']))\
                         .order_by('product_name') 
             if 'category_id' in request.GET:
                 products = products.filter(category_id=request.GET['category_id'])
-            return render(request, self.template_name, {'products': products})
+            return render(request, self.template_name, {'products': products, 'search_text': search_text})
 
         return self.get(request, self.template_name)
 

@@ -126,6 +126,7 @@ function updateSelectedProduct() {
     })
 }
 function searchProduct() {			
+	debugger
 	if(search_text.trim() == '') {
 		location.reload()
 		return
@@ -196,9 +197,10 @@ $(document).ready(function() {
 							<input type="text" 
 								class="form-control" placeholder="Enter text to search" 						
 								onchange="onChangeSearchText(this.value);"
+								value="{{search_text}}" 
 								name ="search_text">
 							<div class="input-group-btn">
-								<button class="btn btn-info" type="submit">
+								<button class="btn btn-info" onclick="searchProduct();">
 									<i class="glyphicon glyphicon-search"></i>
 								</button>
 							</div>
