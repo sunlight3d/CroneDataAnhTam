@@ -16,13 +16,20 @@ class ProductsView(TemplateView):
 
     def get(self, request, *args, **kwargs):                            
         if 'category_id' in request.GET:
-            products = TblProduct.objects.filter(product_name__contains='')\
-                        .filter(category_id=request.GET['category_id'])\
-                        .order_by('product_name')        
-        else:
-            products = TblProduct.objects.filter(product_name__contains='')\
-                        .order_by('product_name')
-        return render(request, self.template_name, {'products': products})
+            products = products.filter(category_id=request.GET['category_id'])            
+        search_text = ''
+        if 'search_text' in request.GET:
+            search_text = request.GET['search_text']
+            products = TblProduct.objects.filter( Q(product_name__contains=search_text) |\
+                         Q(product_id__contains=request.POST['search_text']))\
+                        .order_by('product_name') 
+        
+        return render(request, \
+            self.template_name, \
+            {'products': products, \
+            'search_text': search_text,\
+            'category_id': category_id\
+            })        
 
     def handle_uploaded_file(self, image_file, image_path):                
         with open(image_path, 'wb+') as destination:
@@ -58,16 +65,6 @@ class ProductsView(TemplateView):
                         os.remove(image_path)
                     selected_product.image_name = image_name       
                 selected_product.save()
-        elif request.POST['type'] == 'search':            
-            import pdb
-            pdb.set_trace()
-            products = TblProduct.objects.filter( Q(product_name__contains=request.POST['search_text']) |\
-                         Q(product_id__contains=request.POST['search_text']))\
-                        .order_by('product_name') 
-            if 'category_id' in request.GET:
-                products = products.filter(category_id=request.GET['category_id'])
-            return render(request, self.template_name, {'products': products, 'search_text': search_text})
-
         return self.get(request, self.template_name)
 
     def delete(self, request, *args, **kwargs):
