@@ -125,17 +125,10 @@ function updateSelectedProduct() {
 		},
     })
 }
-function searchProduct({category_id, search_text}) {			
+function searchProduct(params) {			
 	debugger
-	$.get(
-		'', 
-		{category_id, search_text}, 
-		function (data, textStatus, jqXHR) {
-			debugger
-			console.log(`search/filter product: ${product_id} successful`)
-			location.reload()
-		}
-	)		
+	window.location.href = `?category_id=${params.category_id}
+			&search_text=${search_text}`;
 }
 function onChangeProductName(value) {
 	selectedProduct.product_name = value

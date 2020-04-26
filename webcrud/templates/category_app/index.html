@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 {% extends "base.html"%}
 {% block body_block %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 {% csrf_token %}
 <script>
 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
@@ -151,7 +150,7 @@ function onChangeCategoryId(value) {
                         	<a id="aEditCategoryModal" 
                             	onclick="pressaEditCategoryModal({
                             		category_id: '{{category.category_id}}', 
-	                            	category_name: '{{category.category_name}}'};" 
+	                            	category_name: '{{category.category_name}}'});" 
                             	class="edit">
                             	<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                             </a>                            
