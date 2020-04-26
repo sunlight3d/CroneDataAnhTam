@@ -14,16 +14,20 @@ class ProductsView(TemplateView):
     http_method_names = ['get', 'post', 'put', 'delete']
     template_name = 'product_app/index.html'    
 
-    def get(self, request, *args, **kwargs):                            
+    def get(self, request, *args, **kwargs):        
+        category_id = ''
+        search_text = ''        
+        products = TblProduct.objects
         if 'category_id' in request.GET:
-            products = products.filter(category_id=request.GET['category_id'])            
-        search_text = ''
+            category_id = request.GET['category_id']
+            products = products.filter(category_id=request.GET['category_id'])                    
         if 'search_text' in request.GET:
             search_text = request.GET['search_text']
-            products = TblProduct.objects.filter( Q(product_name__contains=search_text) |\
-                         Q(product_id__contains=request.POST['search_text']))\
+            products = products.filter( Q(product_name__contains=search_text) |\
+                         Q(product_id__contains=search_text))\
                         .order_by('product_name') 
-        
+        # import pdb
+        # pdb.set_trace()
         return render(request, \
             self.template_name, \
             {'products': products, \

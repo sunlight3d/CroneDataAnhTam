@@ -125,34 +125,18 @@ function updateSelectedProduct() {
 		},
     })
 }
-// function searchProduct() {			
-// 	debugger
-// 	if(search_text.trim() == '') {
-// 		location.reload()
-// 		return
-// 	}	
-// 	var formData = new FormData();                	
-// 	formData.append('search_text', search_text)		
-// 	formData.append('type','search');		
-// 	$.ajax({
-// 		type: 'POST',
-// 		url: '',
-// 		// data: { product_id, product_name, formData},
-// 		data:formData,		
-// 		contentType: false,
-// 		processData: false,
-// 		success: function() {
-// 			debugger
-// 			console.log(`search/filter product: ${product_id} successful`)
-// 			location.reload()
-// 		},
-// 		error: function(error) {
-// 			debugger
-// 			console.log('Cannot search product'+product_name+'Error = '+error)
-// 			location.reload()
-// 		},
-//     })
-// }
+function searchProduct({category_id, search_text}) {			
+	debugger
+	$.get(
+		'', 
+		{category_id, search_text}, 
+		function (data, textStatus, jqXHR) {
+			debugger
+			console.log(`search/filter product: ${product_id} successful`)
+			location.reload()
+		}
+	)		
+}
 function onChangeProductName(value) {
 	selectedProduct.product_name = value
 }
@@ -200,7 +184,9 @@ $(document).ready(function() {
 								value="{{search_text}}" 
 								name ="search_text">
 							<div class="input-group-btn">
-								<a class="btn btn-info" href="products/?category_id={{category_id}}&search_text={{search_text}}">
+								<a class="btn btn-info" onclick="searchProduct({
+							   		category_id:'{{category_id}}', 
+							   		search_text:'{{search_text}}'})">
 									<i class="glyphicon glyphicon-search"></i>
 								</a>
 							</div>
