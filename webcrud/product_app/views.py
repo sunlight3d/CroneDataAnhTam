@@ -17,7 +17,7 @@ class ProductsView(TemplateView):
     def get(self, request, *args, **kwargs):        
         category_id = ''
         search_text = ''        
-        products = TblProduct.objects
+        products = TblProduct.objects.all()
         if 'category_id' in request.GET:
             category_id = request.GET['category_id']
             products = products.filter(category_id=request.GET['category_id'])                    
