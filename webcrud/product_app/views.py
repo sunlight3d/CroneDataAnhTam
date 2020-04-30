@@ -5,6 +5,7 @@ from django.http import HttpResponse
 import datetime
 import urllib.request
 import os
+import re
 from django.db.models import Q
 
 from .models import TblProduct
@@ -17,17 +18,17 @@ class ProductsView(TemplateView):
     def get(self, request, *args, **kwargs):        
         category_id = ''
         search_text = ''        
+        import pdb
+        pdb.set_trace()
         products = TblProduct.objects.all()
-        if 'category_id' in request.GET:
+        if 'category_id' in request.GET and re.match(r"[-+]?\d+$", str(request.GET['category_id'])) is not None:
             category_id = request.GET['category_id']
             products = products.filter(category_id=request.GET['category_id'])                    
-        if 'search_text' in request.GET:
+        if 'search_text' in request.GET and request.GET['search_text'].strip() != '':
             search_text = request.GET['search_text']
             products = products.filter( Q(product_name__contains=search_text) |\
                          Q(product_id__contains=search_text))\
-                        .order_by('product_name') 
-        # import pdb
-        # pdb.set_trace()
+                        .order_by('product_name')         
         return render(request, \
             self.template_name, \
             {'products': products, \

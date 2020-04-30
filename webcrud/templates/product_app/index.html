@@ -22,7 +22,6 @@ $.ajaxSetup({
 })
 
 var selectedProduct = {}
-var search_text = ""
 function getSelectedProduct(objProduct){
 	debugger
 	selectedProduct = objProduct
@@ -125,8 +124,11 @@ function updateSelectedProduct() {
 		},
     })
 }
+
+
 function searchProduct(params) {			
 	debugger
+	let search_text = $('#inputSearchText').val()
 	window.location.href = `?category_id=${params.category_id}
 			&search_text=${search_text}`;
 }
@@ -156,7 +158,15 @@ function pressaEditProductModal(_selectedProduct) {
 	$("#editProductModal").modal()
 }
 $(document).ready(function() {
-	debugger
+	// $('#inputSearchText').keypress(function (event) {
+	// 	debugger		
+	// 	var keycode = (event.keyCode ? event.keyCode : event.which);
+	// 	if(keycode == 13) {
+	// 		//event.preventDefault();
+	// 		$('#buttonSearchText').click();
+	// 		return false;  
+	// 	}
+	// })
 })
 </script>
 <script>
@@ -171,13 +181,15 @@ $(document).ready(function() {
 					</div>
 					<div class="col-sm-4">
 						<div class="input-group">
-							<input type="text" 
-								class="form-control" placeholder="Enter text to search" 						
-								onchange="onChangeSearchText(this.value);"
+							<input type="text"
+								id="inputSearchText" 
+								class="form-control" placeholder="Enter text to search" 														
 								value="{{search_text}}" 
 								name ="search_text">
 							<div class="input-group-btn">
-								<a class="btn btn-info" onclick="searchProduct({
+								<a class="btn btn-info" 
+									id="buttonSearchText"
+									onclick="searchProduct({
 							   		category_id:'{{category_id}}', 
 							   		search_text:'{{search_text}}'})">
 									<i class="glyphicon glyphicon-search"></i>
