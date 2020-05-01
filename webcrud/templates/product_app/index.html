@@ -158,15 +158,15 @@ function pressaEditProductModal(_selectedProduct) {
 	$("#editProductModal").modal()
 }
 $(document).ready(function() {
-	// $('#inputSearchText').keypress(function (event) {
-	// 	debugger		
-	// 	var keycode = (event.keyCode ? event.keyCode : event.which);
-	// 	if(keycode == 13) {
-	// 		//event.preventDefault();
-	// 		$('#buttonSearchText').click();
-	// 		return false;  
-	// 	}
-	// })
+	$('#inputSearchText').keypress(function (event) {		
+		var keycode = event.which
+		if(keycode == 13) {
+			debugger		
+			//event.preventDefault();
+			$('#buttonSearchText').click();
+			return false;  
+		}
+	})
 })
 </script>
 <script>

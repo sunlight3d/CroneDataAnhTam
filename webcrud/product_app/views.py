@@ -18,8 +18,8 @@ class ProductsView(TemplateView):
     def get(self, request, *args, **kwargs):        
         category_id = ''
         search_text = ''        
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
         products = TblProduct.objects.all()
         if 'category_id' in request.GET and re.match(r"[-+]?\d+$", str(request.GET['category_id'])) is not None:
             category_id = request.GET['category_id']
